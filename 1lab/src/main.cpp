@@ -186,13 +186,16 @@ int main() {
     }
     if (draw_dots) {
       draw_n_dots_by_rejection(window, gen, rejection_dist, db, ub, point,
-                               1000);
-      auto tmp = generate_n_curve_dots(gen, line_dist, db, ub, 10);
-      dots.insert(dots.end(), tmp.begin(), tmp.end());
+                               3000);
+      if (dots.size() < 10000) {
+        auto tmp = generate_n_curve_dots(gen, line_dist, db, ub, 10);
+        dots.insert(dots.end(), tmp.begin(), tmp.end());
+      }
       for (const auto &dot : dots) {
         window.draw(dot);
       }
       window.display();
+      window.clear();
     }
   }
 }
