@@ -1,0 +1,25 @@
+process Generator;
+loop
+    (new Customer).into(Queue);
+    if not Busy then
+        activate(Device)
+    hold(t1)
+end Generator;
+
+process Server;
+loop
+    if not Queue.empty then
+        Queue.first.out;
+        Busy:=TRUE;
+        hold(t2);
+        Busy:=FALSE
+    else
+        passivate
+end Server;
+
+main
+Busy := FALSE;
+Device :- new Server;
+activate(new Generator);
+hold(TMod)
+end.

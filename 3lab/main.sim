@@ -1,0 +1,42 @@
+process Broker;
+loop
+    hold(t_work);
+    Broken := TRUE;
+    if Busy then
+        cancel(Device);
+        CurrentCustomer.into(Queue);
+        Busy := FALSE;
+    hold(t_repair);
+    Broken := FALSE;
+    if not Queue.empty then
+        activate(Device);
+end Broker;
+
+process Generator;
+loop
+    (new Customer).into(Queue);
+    if not Busy and not Broken then
+        activate(Device)
+    hold(t1);
+end Generator;
+
+process Server;
+loop
+    if not Queue.empty and not Broken then
+        CurrentCustomer :- Queue.first;
+        Queue.first.out;
+        Busy := TRUE;
+        hold(t2);
+        Busy := FALSE
+    else
+        passivate;
+end Server;
+
+main
+    Busy := FALSE;
+    Broken := FALSE;
+    Device :- new Server;
+    activate(new Generator);
+    activate(new Broker);
+    hold(TMod);
+end;
