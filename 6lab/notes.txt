@@ -1,0 +1,9 @@
+Подключиться и что-то выполнить
+docker exec --interactive --tty neo4j cypher-shell -u neo4j -p password "create ({Id: 1});"
+Удалить всё
+docker exec --interactive --tty neo4j cypher-shell -u neo4j -p password "match (n) detach delete n;"
+Добавить вершины и рёбра
+MERGE (:Node {Id: 1});
+MERGE (:Node {Id: 2});
+MATCH (a:Node {Id: 1}), (b:Node {Id: 2}) MERGE (a)-[:CONNECTED]->(b);
+MATCH (a:Node {Id: 1}), (b:Node {Id: 2}) MERGE (b)-[:CONNECTED]->(a);
